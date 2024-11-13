@@ -146,7 +146,7 @@ uno:
       renewBefore: 360h
       # organization is the organization label within the certificates. This parameter applies if you set useCustomizedCert to true.
       organization: hcl
-      # additionalCASecrets contains additional secrets, for example to trust MongoDb or Kafka certificates. This parameter applies if you set useCustomizedCert to true.
+      # additionalCASecrets contains additional secrets, for example to trust MongoDb or Kafka certificates.
       additionalCASecrets: 
       #  - secretname1
     apiKey:
