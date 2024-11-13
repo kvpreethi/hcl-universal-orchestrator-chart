@@ -70,13 +70,6 @@ Before you begin the deployment process, ensure your environment meets the follo
  - Helm v 3.12 or later
  - Messaging system: Apache Kafka v 3.4.0 or later OR Redpanda v 23.11 or later 
  - Database: MongoDB v 5 or later OR Azure Cosmos DB for MongoDB (vCore) OR DocumentDB for AWS deployment
- - Enablement of an OIDC provider. You can enable an OIDC user registry by configuring the `values.yaml` deployment file as follows:
-
-        uno.authentication.oidc.enabled=true
-
-   Enter the required values into the `authentication` section of the `values.yaml` file, according to your OIDC provider. If the OIDC you are using has custom certificates, to connect your machine to your OIDC provider you must use the certificate as secret in the following parameter of under `certificates` section:
-
-        uno.config.certificates.additionalCASecrets : Specify the secret.
 
 **Strongly recommended**
 
@@ -169,7 +162,102 @@ To deploy HCL Universal Orchestrator, perform the following steps:
 	
 **Note:** If you want to download a specific version of the chart use the `--version` option in the `helm pull` command.
 	
-3. Customize the deployment. Configure each product component by adjusting the values in the `values.yaml` file. The `values.yaml`file contains a detailed explanation for each parameter. 
+3. Customize the deployment. Configure each product component by adjusting the values in the `values.yaml` file. The `values.yaml`file contains a detailed explanation for each parameter you must provide values 
+   for the following mandatory parameters:
+   
+   **License**
+   
+   license: Indicates whether you accept the license or not. Supported values are accept and not accepted. You must set the value as accept.
+   
+   **database**
+
+   * url: URL of the database.
+
+          url: mongodb://hcl-uno-db-mongodb.db.svc.cluster.local:27017
+
+   * type: database type and supported value is mongodb.
+   * databaseName: database name and supported value is uno.
+   * username: name of the database user.
+   * password: password of the database user.
+   * tls: specifies whether TLS is enabled or not and supported values are true or false.
+   * tlsInsecure: tlsInsecure specifies whether certificate validation must be skipped or not and supported values are true or false.
+
+    **kafka**
+
+   * url: URL of the event streaming platform. For example,
+
+          url: hcl-uno-kafka-0.kafka-headless.kafka.svc.cluster.local:9092
+
+   * username: name of the kafka user.
+   * password: password of the kafka user.
+   * tls: specify whether TLS is enabled or not and supported values are true or false.
+   * saslMechanism : specify the Kafka sasl mechanism of the user. For example, 
+     
+          saslMechanism: PLAIN
+
+   * jaasConfig: specify the configuration string that defines the authentication details for the given SASL mechanism. For example,
+    
+          jaasConfig: org.apache.kafka.common.security.plain.PlainLoginModule required username="my-user" password="my-password";
+
+   * securityProtocol: Specify the communication protocol that kafka supports. For example,
+       
+          securityProtocol: PLAINTEXT
+
+   * tlsInsecure: tlsInsecure specifies whether certificate validation must be skipped or not and supported values are true or false.
+  
+    **Enable an OIDC provider**
+
+      You can enable an OIDC user registry by configuring the `values.yaml` deployment file as follows:
+
+        uno.authentication.oidc.enabled=true
+
+      Enter the required values into the `authentication` section of the `values.yaml` file, according to your OIDC provider. If the OIDC you are using has custom certificates, to connect your machine to your 
+      OIDC provider you must use the certificate as secret in the following parameter of under `certificates` section:
+
+        uno.config.certificates.additionalCASecrets : Specify the secret.
+
+   You can customize the deployment environment by setting up the following optional parameters: 
+
+     
+     **Session timeout**
+
+
+   After a period of inactivity on the UI, users are automatically logged out. By default, the session timeout is set to 30 minutes, and a warning message appears 2 minutes before the session expires to 
+   alert users about their inactivity. You can change the session timeout value by modifying the following parameter in the values.yaml file of the Helm chart:
+         
+        uno.config.console.sessionTimeoutMinutes : 30
+
+     **Log out option**
+   
+      By default, the log out option is not enabled on the UI. If you want to display the log out icon, you must set the following parameter in the values.yaml file of the Helm chart:
+   
+        uno.config.console.enableLogout : true
+
+     **Generative workflows**
+   
+     You can leverage the generative AI features of the UnO AI Pilot to turn a description into an effective workflow, as explained in Generative workflows.
+     You can leverage the feature by enabling the following parameter of the values.yaml file of the Helm chart:
+      
+        uno.config.console.genai.enabled : true
+
+   Optionally, you can set the proxy.
+
+     **Justifications and rag**
+   
+     Administrators can request to specify a justification when saving or editing items to keep track of the changes in the environment.
+     To display the justification panel every time a user performs a change, set the following parameter in the values.yaml file of the Helm chart to true:
+     
+        uno.config.console.engine.justificationEnabled : true
+
+      You can also define that a justification is mandatory so that users cannot save the changes until one of the justifications or also all of them have been provided. To require mandatory justifications, set 
+      the related parameters in the values.yaml file of the Helm chart as follows:
+
+	     
+        uno.config.console.engine.justificationCategoryRequired : true
+        uno.config.console.engine.justificationTicketNumberRequire: true
+        uno.config.console.engine.justificationDescriptionRequired: true
+
+      For more information about justifications, see [Keeping track of changes in your environment](https://help.hcl-software.com/UnO/v2.1/Deployment/justifications.html).
 
 4. Deploy the instance by running the following command: 
 
