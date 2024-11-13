@@ -233,7 +233,7 @@ To deploy HCL Universal Orchestrator, perform the following steps:
    
         uno.config.console.enableLogout : true
 
-     **Generative workflows**
+     **Generative workflows and RAG**
    
      You can leverage the generative AI features of the UnO AI Pilot to turn a description into an effective workflow, as explained in Generative workflows.
      You can leverage the feature by enabling the following parameter of the values.yaml file of the Helm chart:
@@ -242,7 +242,7 @@ To deploy HCL Universal Orchestrator, perform the following steps:
 
    Optionally, you can set the proxy.
 
-     **Justifications and rag**
+     **Justifications**
    
      Administrators can request to specify a justification when saving or editing items to keep track of the changes in the environment.
      To display the justification panel every time a user performs a change, set the following parameter in the values.yaml file of the Helm chart to true:
