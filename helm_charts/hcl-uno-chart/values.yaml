@@ -380,10 +380,10 @@ uno:
     # Channels Configuration 
     # The following configuration is used to enable the AIPilot for the channels. For each channel, you need to provide the required configuration.
     channels:
-      slackToken: "xoxb-7086750364882-7072429182679-CwAt3pn6NWnQzho86OMMswOA"
-      slackSigningSecret: "b027d9489f0f4461fd30fcaa2fa39ee3"
-      slackChannel: "C072XC8DAN5"
-      googleProjectId: "420069210697"
+      slackToken: 
+      slackSigningSecret: 
+      slackChannel: 
+      googleProjectId: 
       botframeworkAppId: ""
       botframeworkAppPassword: ""
 
